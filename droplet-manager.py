@@ -163,12 +163,18 @@ def show_main_menu(chat_id, user_id):
         types.InlineKeyboardButton("🔍 CHECK TOKEN", callback_data="check_token")
     )
 
-    welcome_msg = """Selamat datang di Bot Management Droplet DigitalOcean!
+    welcome_msg = """🔮Bot Management Droplet DigitalOcean!
 
 ⚠️ PERINGATAN KEAMANAN:
 - Password root digenerate otomatis dan aman
 - Simpan password dengan baik
-- Disarankan untuk menggunakan SSH key setelah setup"""
+- Pastikan Kamu mengganti Password Setelah Berhasil Login
+
+❗❗ Bot Ini 100% Free, Tidak Untuk Di sewakan. Jika Kamu Sedang Menyewa Bot Ini Berarti Kamu Kena Scam
+
+Bot Create By : SAN (Owner SanStore)
+Kamu Bisa Donate Kalo kamu Lagi Kaya😁
+Gopay/Dana : 082292615651"""
     
     bot.send_message(chat_id, welcome_msg, reply_markup=markup)
 
