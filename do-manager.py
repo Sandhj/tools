@@ -92,7 +92,7 @@ def auto_backup():
         except Exception as e:
             print(f"Backup error: {e}")
         
-        time.sleep(60)  # Wait 1 minute
+        time.sleep(1 * 3600)  # Wait 1 Jam
 
 def restore_database(file_info):
     try:
@@ -223,7 +223,7 @@ class UserState:
 user_state = UserState()
 
 # Account Selection
-def show_account_selection(chat_id, user_id, message_id=None, message_text="Pilih akun DigitalOcean yang ingin digunakan:", action=None):
+def show_account_selection(chat_id, user_id, message_id=None, message_text="Pilih akun DigitalOcean yang ingin Kamu Operasikan:", action=None):
     accounts = get_user_accounts(user_id)
     
     if not accounts:
@@ -304,7 +304,7 @@ def show_main_menu(chat_id, user_id, account_id=None, message_id=None):
     welcome_msg = """🔮Bot Management Droplet DigitalOcean!
 
 ⚠️ PERINGATAN KEAMANAN:
-- Password root digenerate otomatis dan aman
+- Password Akan Digenerate Otomatis
 - Simpan password dengan baik
 - Pastikan Kamu mengganti Password Setelah Berhasil Login
 
@@ -554,7 +554,7 @@ def confirm_delete_droplet(chat_id, user_id, droplet_id, message_id):
     )
     
     message = f"⚠️ Anda yakin ingin menghapus droplet ini?\n\n"
-    message += f"🔹 {name}\n"
+    message += f"🟢 {name}\n"
     message += f"ID: {droplet_id}\n"
     message += f"Status: {status}\n"
     if ip_address:
@@ -625,10 +625,10 @@ def show_resize_options(chat_id, user_id, droplet_id, message_id):
     name, ip_address, status, current_size, _ = droplet_info
     
     size_options = {
-        "💲 1GB RAM, 1vCPU": "s-1vcpu-1gb",
-        "💲💲 2GB RAM, 2vCPU": "s-2vcpu-2gb",
-        "💲💲💲 4GB RAM, 2vCPU": "s-2vcpu-4gb",
-        "💲💲💲💲 8GB RAM, 4vCPU": "s-4vcpu-8gb"
+        "🔮 1GB RAM, 1vCPU": "s-1vcpu-1gb",
+        "🔮 2GB RAM, 2vCPU": "s-2vcpu-2gb",
+        "🔮 4GB RAM, 2vCPU": "s-2vcpu-4gb",
+        "🔮 8GB RAM, 4vCPU": "s-4vcpu-8gb"
     }
 
     markup = types.InlineKeyboardMarkup()
@@ -639,9 +639,10 @@ def show_resize_options(chat_id, user_id, droplet_id, message_id):
     markup.row(types.InlineKeyboardButton("❌ Batal", callback_data="cancel_action"))
     
     message = f"🔄 Pilih ukuran baru untuk droplet:\n\n"
-    message += f"🔹 {name}\n"
+    message += f"🟢 {name}\n"
     message += f"ID: {droplet_id}\n"
     message += f"Ukuran saat ini: {current_size}\n"
+    message += f"Saat Memilih Size Klik 1x Dan Tunggu Beberapa Saat\n"
     
     bot.edit_message_text(
         chat_id=chat_id,
@@ -709,7 +710,7 @@ def resize_droplet(chat_id, user_id, droplet_id, new_size, message_id):
                 bot.edit_message_text(
                     chat_id=chat_id,
                     message_id=message_id,
-                    text=f"⏳ Droplet sedang diubah ukurannya ke {new_size} dan akan dinyalakan..."
+                    text=f"⏳ Droplet sedang diubah ukurannya ke {new_size} ..."
                 )
             else:
                 bot.edit_message_text(
@@ -751,7 +752,7 @@ def monitor_droplet_resize(chat_id, user_id, droplet_id, token, message_id):
                     bot.edit_message_text(
                         chat_id=chat_id,
                         message_id=message_id,
-                        text=f"✅ Ukuran droplet berhasil diubah dan dinyalakan!\n"
+                        text=f"✅ Ukuran droplet berhasil diubah\n"
                         f"ID: {droplet_id}\n"
                         f"Ukuran baru: {size_slug}"
                     )
@@ -847,10 +848,10 @@ def show_os_selection(chat_id, user_id, name):
 # Size Selection
 def show_size_selection(chat_id, user_id, os, name, message_id=None):
     size_options = {
-        "💲 1GB RAM, 1vCPU": "s-1vcpu-1gb",
-        "💲💲 2GB RAM, 2vCPU": "s-2vcpu-2gb",
-        "💲💲💲 4GB RAM, 2vCPU": "s-2vcpu-4gb",
-        "💲💲💲💲 8GB RAM, 4vCPU": "s-4vcpu-8gb"
+        "🔮 1GB RAM, 1vCPU": "s-1vcpu-1gb",
+        "🔮 2GB RAM, 2vCPU": "s-2vcpu-2gb",
+        "🔮 4GB RAM, 2vCPU": "s-2vcpu-4gb",
+        "🔮 8GB RAM, 4vCPU": "s-4vcpu-8gb"
     }
 
     markup = types.InlineKeyboardMarkup()
