@@ -981,6 +981,7 @@ Perintah Login Terminal:
 <code>root@{ip_address}</code>
 
 ⚠️ Disarankan Untuk Mengganti Password!
+Tunggu Beberapa Menit Sebelum Menjalankan VPS
 """
                     if message_id:
                         bot.edit_message_text(
