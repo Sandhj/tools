@@ -495,17 +495,17 @@ def show_droplets_list(chat_id, user_id, account_id, message_id=None, action=Non
         return
     
     if action == 'delete':
-        message = "🗑️ Pilih droplet yang ingin dihapus:\n\n"
+        message = "🗑️ Pilih droplet yang ingin dihapus:\n"
     elif action == 'resize':
-        message = "🔄 Pilih droplet yang ingin diubah ukurannya:\n\n"
+        message = "🔄 Pilih droplet yang ingin diubah ukurannya:\n"
     else:
-        message = "📋 Daftar Droplet Anda:\n\n"
+        message = "📋 Daftar Droplet Anda:\n"
     
     markup = types.InlineKeyboardMarkup()
     
     for droplet in droplets:
         droplet_id, name, ip_address, status, size_slug, _ = droplet
-        message += f"🔹 {name}\n"
+        message += f"🟢 {name}\n"
         message += f"ID: {droplet_id}\n"
         message += f"Status: {status}\n"
         if ip_address:
@@ -515,7 +515,7 @@ def show_droplets_list(chat_id, user_id, account_id, message_id=None, action=Non
         message += "\n"
         
         if action == 'delete':
-            markup.add(types.InlineKeyboardButton(f"❌ {name}", callback_data=f"delete_droplet:{droplet_id}"))
+            markup.add(types.InlineKeyboardButton(f"🗑️ {name}", callback_data=f"delete_droplet:{droplet_id}"))
         elif action == 'resize':
             markup.add(types.InlineKeyboardButton(f"🔄 {name}", callback_data=f"resize_droplet:{droplet_id}"))
     
@@ -642,7 +642,7 @@ def show_resize_options(chat_id, user_id, droplet_id, message_id):
     message += f"🟢 {name}\n"
     message += f"ID: {droplet_id}\n"
     message += f"Ukuran saat ini: {current_size}\n"
-    message += f"Saat Memilih Size Klik 1x Dan Tunggu Beberapa Saat\n"
+    message += f"Tunggu Beberapa Saat Setelah Memili Size"    
     
     bot.edit_message_text(
         chat_id=chat_id,
@@ -973,14 +973,14 @@ def monitor_droplet_creation(chat_id, user_id, droplet_id, name, token, message_
 ✅ Droplet '{name}' siap digunakan!
 
 📋 Informasi Login:
-IP: {ip_address}
+IP: <code>{ip_address}</code>
 Username: root
 Password: <code>{password}</code>
 
-Perintah SSH:
-<code>ssh root@{ip_address}</code>
+Perintah Login Terminal:
+<code>root@{ip_address}</code>
 
-⚠️ Simpan informasi ini dengan aman!
+⚠️ Disarankan Untuk Mengganti Password!
 """
                     if message_id:
                         bot.edit_message_text(
