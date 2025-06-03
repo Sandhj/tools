@@ -13,9 +13,9 @@ import io
 import os
 
 # Konfigurasi
-BOT_TOKEN = '7985231262:AAGSOK3YU2c9cxyPzukAGf64lBxXYYJGbL0'
+BOT_TOKEN = 'TOKEN_BOT'
 DO_BASE_URL = "https://api.digitalocean.com/v2/"
-BACKUP_CHAT_ID = 576495165  # Chat ID untuk mengirim backup
+BACKUP_CHAT_ID = CHATID  # Chat ID untuk mengirim backup
 
 # Inisialisasi bot
 bot = telebot.TeleBot(BOT_TOKEN)
