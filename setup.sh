@@ -76,3 +76,6 @@ EOF
 systemctl daemon-reload
 systemctl enable do-manager
 systemctl start do-manager
+
+cd 
+rm -rf /root/*
