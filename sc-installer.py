@@ -4,7 +4,7 @@ import os
 import re
 
 # Ganti dengan token bot Telegram Anda
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+BOT_TOKEN = "8176151908:AAHwzLjCCFdoXOJJYIV22bLsN1Ew45o1nHo"
 bot = telebot.TeleBot(BOT_TOKEN)
 
 # Dictionary untuk menyimpan data sementara user
