@@ -4,7 +4,7 @@ import json
 import re
 
 # Konfigurasi
-TELEGRAM_TOKEN = "8310348454:AAHStB-GTHuAvx5G2XArai6EL8vELguf22A"
+TELEGRAM_TOKEN = "8311291721:AAHBvptpUxGodw1-bntXbPonFAiGl3lhNdA"
 CF_API_KEY = "ea6a937332a2f01d2d22d495dafdfbd187cd3"
 CF_EMAIL = "hasdararysandhy@gmail.com"
 ZONE_ID = "f7400aabacca20ee7f6227f716396fab"
