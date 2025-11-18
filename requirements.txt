@@ -1,2 +1,4 @@
+pkg install cronie
+crond
 pkg install sshpass
 pip install pythelegrambotApi subproses requests
