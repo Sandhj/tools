@@ -148,8 +148,8 @@ def run_vps_setup(chat_id, user):
         
         if result.returncode == 0:
             bot.send_message(chat_id, "🎉 **Setup VPS berhasil diselesaikan!**\n\n"
-                                     "✅ Domain telah disimpan\n"
-                                     "✅ Script install telah dijalankan\n"
+                                     "✅ Cek Notifikasi Berhasil Dari File Setup\n"
+                                     "✅ Setelah Notifikasi Selesai\n"
                                      "✅ VPS siap digunakan")
         else:
             if "Timeout" in str(result):
