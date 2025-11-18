@@ -137,34 +137,6 @@ Gunakan /help untuk info lengkap.
     """
     bot.reply_to(message, welcome_text, parse_mode='Markdown')
 
-# Handler perintah help
-@bot.message_handler(commands=['help'])
-def send_help(message):
-    help_text = """
-📖 **Cara Penggunaan:**
-
-1. **Tambah Record (Tanpa Proxy):**
-   Ketik `/add_noproxy`
-   Bot akan meminta:
-   - Nama subdomain
-   - Alamat IPv4
-
-2. **Edit Record:**
-   Ketik `/edit_record`
-   Pilih record yang akan diedit dari daftar
-   Masukkan nama subdomain baru dan IP baru
-
-3. **Hapus Record:**
-   Ketik `/delete`
-   Pilih record yang akan dihapus
-
-4. **Lihat Daftar Records:**
-   Ketik `/list`
-
-⚠ **Catatan:**
-- IP harus format IPv4 yang valid
-    """
-    bot.reply_to(message, help_text, parse_mode='Markdown')
 
 # Handler untuk menambah record tanpa proxy
 @bot.message_handler(commands=['add_noproxy'])
@@ -405,6 +377,4 @@ def handle_unknown(message):
 
 # Jalankan bot
 if __name__ == "__main__":
-    print("🤖 Bot DNS Manager berjalan...")
-    print("Fitur yang aktif: /add_noproxy, /list, /edit_record, /delete")
     bot.polling(none_stop=True)
