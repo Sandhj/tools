@@ -6,4 +6,4 @@ if pgrep -f "cf-manager.py" > /dev/null; then
     exit 1
 fi
 
-python cf-manager py
+python cf-manager.py
