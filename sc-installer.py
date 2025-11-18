@@ -1,9 +1,8 @@
 import telebot
 import paramiko
-import os
 from threading import Lock
 
-# Ganti dengan token bot Telegram Anda
+# Token bot Telegram
 BOT_TOKEN = "8255110757:AAFGiEMmjP8LWPbcArK2QDafxq12j7NKPkc"
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -11,22 +10,23 @@ bot = telebot.TeleBot(BOT_TOKEN)
 user_data = {}
 user_lock = Lock()
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['install'])
 def start_message(message):
     markup = telebot.types.ReplyKeyboardRemove()
     bot.send_message(message.chat.id, 
                     "🤖 **Bot Management VPS**\n\n"
-                    "Saya akan membantu mengatur domain di VPS Anda.\n\n"
                     "Silakan masukkan **IP Address VPS**:", 
                     parse_mode='Markdown', 
                     reply_markup=markup)
+    
+    with user_lock:
+        user_data[message.chat.id] = {'step': 'ip'}
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     chat_id = message.chat.id
     
     with user_lock:
-        # Step 1: Minta IP VPS
         if chat_id not in user_data:
             user_data[chat_id] = {'step': 'ip'}
             bot.send_message(chat_id, "🌐 **Masukkan IP Address VPS:**", parse_mode='Markdown')
@@ -34,23 +34,19 @@ def handle_message(message):
         
         current_step = user_data[chat_id].get('step')
         
-        # Step 2: Simpan IP dan minta password
         if current_step == 'ip':
             user_data[chat_id]['ip'] = message.text.strip()
             user_data[chat_id]['step'] = 'password'
             bot.send_message(chat_id, "🔐 **Masukkan Password root VPS:**", parse_mode='Markdown')
         
-        # Step 3: Simpan password dan minta domain
         elif current_step == 'password':
             user_data[chat_id]['password'] = message.text.strip()
             user_data[chat_id]['step'] = 'domain'
             bot.send_message(chat_id, "📝 **Masukkan Domain:**\nContoh: example.com", parse_mode='Markdown')
         
-        # Step 4: Simpan domain dan proses ke VPS
         elif current_step == 'domain':
             user_data[chat_id]['domain'] = message.text.strip()
             
-            # Konfirmasi data
             ip = user_data[chat_id]['ip']
             domain = user_data[chat_id]['domain']
             
@@ -99,27 +95,24 @@ def process_vps_configuration(call, chat_id):
         
         # Update pesan
         bot.edit_message_text(
-            f"⏳ **Menghubungkan ke VPS...**\n\n"
-            f"🌐 IP: `{ip}`\n"
-            f"📝 Domain: `{domain}`",
+            f"⏳ **Sedang memproses...**\n\n"
+            f"🌐 Menghubungkan ke: `{ip}`\n"
+            f"📝 Mengatur domain: `{domain}`",
             chat_id, call.message.message_id, parse_mode='Markdown'
         )
         
         # Eksekusi perintah di VPS
-        result = execute_on_vps(ip, password, domain)
+        success = execute_on_vps(ip, password, domain)
         
-        if result['success']:
+        if success:
             success_text = f"""
-✅ **Berhasil!**
+✅ **Berhasil Diatur!**
 
 🌐 **VPS:** `{ip}`
 📝 **Domain:** `{domain}`
 
 ✅ Domain berhasil diatur dan script dijalankan.
-
-**Output:**
-```{result['output']}```
-            """
+"""
             bot.edit_message_text(success_text, chat_id, call.message.message_id, parse_mode='Markdown')
         else:
             error_text = f"""
@@ -128,8 +121,9 @@ def process_vps_configuration(call, chat_id):
 🌐 **VPS:** `{ip}`
 📝 **Domain:** `{domain}`
 
-**Error:** {result['error']}
-            """
+Gagal terhubung atau menjalankan perintah.
+Periksa IP dan password Anda.
+"""
             bot.edit_message_text(error_text, chat_id, call.message.message_id, parse_mode='Markdown')
         
         # Hapus data user setelah selesai
@@ -138,7 +132,7 @@ def process_vps_configuration(call, chat_id):
                 del user_data[chat_id]
                 
     except Exception as e:
-        bot.edit_message_text(f"❌ Error: {str(e)}", chat_id, call.message.message_id)
+        bot.edit_message_text("❌ Terjadi error saat memproses", chat_id, call.message.message_id)
         with user_lock:
             if chat_id in user_data:
                 del user_data[chat_id]
@@ -181,36 +175,18 @@ def execute_on_vps(ip, password, domain):
             "/tmp/install_bot.sh"
         ]
         
-        output_lines = []
-        
         for cmd in commands:
             stdin, stdout, stderr = ssh.exec_command(cmd)
             exit_status = stdout.channel.recv_exit_status()
             
             if exit_status != 0:
-                error_msg = stderr.read().decode().strip()
-                return {
-                    'success': False,
-                    'error': f"Command failed: {cmd}\nError: {error_msg}"
-                }
-            
-            cmd_output = stdout.read().decode().strip()
-            if cmd_output:
-                output_lines.append(f"$ {cmd}\n{cmd_output}")
+                return False
         
         ssh.close()
+        return True
         
-        return {
-            'success': True,
-            'output': '\n'.join(output_lines[-3:])  # Tampilkan 3 output terakhir
-        }
-        
-    except paramiko.AuthenticationException:
-        return {'success': False, 'error': 'Authentication failed - Password salah'}
-    except paramiko.SSHException as e:
-        return {'success': False, 'error': f'SSH error: {str(e)}'}
     except Exception as e:
-        return {'success': False, 'error': f'Connection error: {str(e)}'}
+        return False
 
 @bot.message_handler(commands=['cancel'])
 def cancel_command(message):
